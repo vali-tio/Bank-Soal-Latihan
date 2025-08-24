@@ -1,157 +1,188 @@
-<!-- ========== BAGIAN 1/6 ========== -->
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Aplikasi Belajar SMP — Final</title>
- <link rel="manifest" href="manifest.webmanifest">
-  <meta name="description" content="Aplikasi belajar SMP lengkap: jadwal, todo, latihan, paket kustom, admin lock, ekspor/impor, PDF & share.">
-<style>
-:root{
-  --bg:#0b1020; --card:#151b2f; --muted:#8aa0ff; --text:#eaf0ff; --sub:#c7cffc;
-  --accent:#6ea8fe; --ok:#28c281; --warn:#ffb020; --danger:#ff5d5d;
-  --radius:14px; --border: rgba(255,255,255,.08);
-  --shadow: 0 10px 30px rgba(0,0,0,.35);
-}
-[data-theme="light"]{
-  --bg:#f6f8ff; --card:#fff; --muted:#5566cc; --text:#111525; --sub:#445;
-  --accent:#3b6cff; --border: rgba(17,21,37,.08); --shadow: 0 10px 30px rgba(17,21,37,.08);
-}
-*{box-sizing:border-box}
-html,body{
-  height:100%; margin:0;
-  font-family:Inter, system-ui, -apple-system,Segoe UI,Roboto,Arial;
-  background:linear-gradient(180deg,var(--bg),#071025);
-  color:var(--text); transition:.2s
-}
-header{
-  position:sticky; top:0; backdrop-filter:saturate(140%) blur(8px);
-  padding:12px 16px; background:rgba(11,16,32,.6);
-  border-bottom:1px solid var(--border); z-index:10
-}
-[data-theme="light"] header{background:rgba(255,255,255,.85)}
-.wrap{max-width:1100px; margin:0 auto}
-.brand{display:flex; gap:12px; align-items:center}
-.logo{width:42px;height:42px;border-radius:10px;
-  background:radial-gradient(circle at 20% 20%, #6ea8fe,#4f5bd5);
-  box-shadow:0 8px 24px rgba(78,107,255,.25)}
-h1{margin:0;font-size:18px}
-.sub{font-size:12px;color:var(--sub)}
+<!DOCTYPE html><html lang="id"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Aplikasi Belajar SMP — Final</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="description" content="Aplikasi belajar SMP lengkap: jadwal, todo, latihan, paket kustom, admin lock, ekspor/impor, PDF &amp; share.">
 
-.controls{display:flex; gap:10px; align-items:center; margin-left:auto}
-.switch{position:relative;width:54px;height:30px;border-radius:999px;
-  background:#0e1429;border:1px solid var(--border);cursor:pointer}
-.knob{position:absolute; top:3px; left:3px; width:24px; height:24px;
-  border-radius:50%; background:#fff; transition:left .2s}
-[data-theme="light"] .switch{background:#e9ecff}
-[data-theme="light"] .knob{left:27px}
+  <style>
+  :root {
+    --bg: #0b1020; --card: #151b2f; --muted: #8aa0ff; --text: #eaf0ff; --sub: #c7cffc;
+    --accent: #6ea8fe; --ok: #28c281; --warn: #ffb020; --danger: #ff5d5d;
+    --radius: 14px; --border: rgba(255,255,255,.08);
+    --shadow: 0 10px 30px rgba(0,0,0,.35);
+  }
+  [data-theme="light"] {
+    --bg: #f6f8ff; --card: #fff; --muted: #5566cc; --text: #111525; --sub: #445;
+    --accent: #3b6cff; --border: rgba(17,21,37,.08); --shadow: 0 10px 30px rgba(17,21,37,.08);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    height: 100%; margin: 0;
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    background: linear-gradient(180deg, var(--bg), #071025);
+    color: var(--text); transition: .2s;
+    /* Mobile first width */
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    position: sticky; top: 0; backdrop-filter: saturate(140%) blur(8px);
+    padding: 12px 10px; background: rgba(11,16,32,.6);
+    border-bottom: 1px solid var(--border); z-index: 10;
+  }
+  [data-theme="light"] header { background: rgba(255,255,255,.85); }
+  .wrap { max-width: 480px; margin: 0 auto; }
+  .brand { display: flex; gap: 12px; align-items: center; }
+  .logo { width: 38px; height: 38px; border-radius: 10px;
+    background: radial-gradient(circle at 20% 20%, #6ea8fe, #4f5bd5);
+    box-shadow: 0 8px 24px rgba(78,107,255,.25);
+  }
+  h1 { margin: 0; font-size: 16px; line-height: 1.1; }
+  .sub { font-size: 12px; color: var(--sub); }
+  .controls { display: flex; gap: 10px; align-items: center; margin-left: auto; }
+  .switch { position: relative; width: 46px; height: 26px; border-radius: 999px;
+    background: #0e1429; border: 1px solid var(--border); cursor: pointer;
+  }
+  .knob { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px;
+    border-radius: 50%; background: #fff; transition: left .2s;
+  }
+  [data-theme="light"] .switch { background: #e9ecff; }
+  [data-theme="light"] .knob { left: 22px; }
 
-/* tabs */
-.tabs{display:flex; gap:8px; margin-top:12px}
-.tab-btn{background:var(--card); border:1px solid var(--border);
-  padding:9px 14px; border-radius:10px; cursor:pointer;
-  font-weight:600; color:var(--text)}
-.tab-btn[aria-selected="true"]{
-  background:linear-gradient(180deg,#141a2d,#0f1530);
-  box-shadow:var(--shadow); border-color:transparent}
-[data-theme="light"] .tab-btn[aria-selected="true"]{background:var(--card)}
+  /* Tabs */
+  .tabs { display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; }
+  .tab-btn {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 8px 12px; border-radius: 10px; cursor: pointer;
+    font-weight: 600; color: var(--text); font-size: 14px;
+    white-space: nowrap;
+  }
+  .tab-btn[aria-selected="true"] {
+    background: linear-gradient(180deg, #141a2d, #0f1530);
+    box-shadow: var(--shadow); border-color: transparent;
+  }
+  [data-theme="light"] .tab-btn[aria-selected="true"] { background: var(--card); }
 
-/* layout */
-main{padding:16px}
-.grid{display:grid; gap:16px}
-@media(min-width:900px){ .grid{grid-template-columns:1.4fr 1fr} }
+  main { padding: 10px 0 70px 0; flex: 1 0 auto; }
+  .grid { display: block; gap: 16px; }
+  .card {
+    background: linear-gradient(180deg, #141a2d, #10162a);
+    border-radius: 12px; border: 1px solid var(--border);
+    box-shadow: var(--shadow); overflow: hidden; margin-bottom: 16px;
+  }
+  [data-theme="light"] .card { background: var(--card); }
+  .head { padding: 12px 14px; border-bottom: 1px dashed var(--border); }
+  .body { padding: 12px 14px; }
+  label { display: block; font-size: 12px; color: var(--sub); margin-bottom: 4px; }
+  input,select,textarea,button {
+    padding: 9px; border-radius: 10px; border: 1px solid var(--border);
+    background: transparent; color: var(--text); width: 100%; box-sizing: border-box; font-size: 14px;
+  }
+  [data-theme="light"] input,
+  [data-theme="light"] select,
+  [data-theme="light"] textarea { background: #f7f8ff; color: var(--text); }
+  textarea { min-height: 80px; }
+  .row { display: block; gap: 10px; }
+  .cols-2 > * { width: 100%; display: block; margin-bottom: 8px; }
+  .cols-3 > * { width: 100%; display: block; margin-bottom: 8px; }
 
-.card{background:linear-gradient(180deg,#141a2d,#10162a);
-  border-radius:12px; border:1px solid var(--border);
-  box-shadow:var(--shadow); overflow:hidden}
-[data-theme="light"] .card{background:var(--card)}
-/* small items */
-.head{padding:14px;border-bottom:1px dashed var(--border)}
-.body{padding:14px}
-label{display:block;font-size:12px;color:var(--sub);margin-bottom:6px}
-input,select,textarea,button{
-  padding:10px;border-radius:10px;border:1px solid var(--border);
-  background:transparent; color:var(--text); width:100%; box-sizing:border-box}
-[data-theme="light"] input,
-[data-theme="light"] select,
-[data-theme="light"] textarea{background:#f7f8ff;color:var(--text)}
-textarea{min-height:80px}
-.row{display:grid; gap:10px}
-@media(min-width:640px){
-  .cols-2{grid-template-columns:1fr 1fr}
-  .cols-3{grid-template-columns:1fr 1fr 1fr}
-}
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 8px 12px; border-radius: 10px; cursor: pointer; border: 0; font-size: 14px;
+  }
+  .btn.primary { background: linear-gradient(180deg, #5f8bff, #4669ff); color: white; }
+  .btn.ghost { background: transparent; color: var(--sub); border: 1px dashed var(--border); }
+  .btn.warn { background: linear-gradient(180deg, #ffb56b, #ff9442); color: #111; }
+  .btn.danger { background: linear-gradient(180deg, #ff6e6e, #ff4d4d); color: white; }
 
-.btn{display:inline-flex; align-items:center; justify-content:center; gap:8px;
-  padding:8px 12px; border-radius:10px; cursor:pointer; border:0}
-.btn.primary{background:linear-gradient(180deg,#5f8bff,#4669ff); color:white}
-.btn.ghost{background:transparent; color:var(--sub); border:1px dashed var(--border)}
-.btn.warn{background:linear-gradient(180deg,#ffb56b,#ff9442); color:#111}
-.btn.danger{background:linear-gradient(180deg,#ff6e6e,#ff4d4d); color:white}
+  .list { display: flex; flex-direction: column; gap: 10px; }
+  .item { display: flex; gap: 12px; align-items: flex-start; padding: 10px;
+    background: #0f152a; border-radius: 10px; border: 1px solid var(--border); }
+  [data-theme="light"] .item { background: #f7f8ff; }
+  .item .grow { flex: 1; }
+  .pill {
+    font-size: 11px; padding: 6px 10px; border-radius: 999px;
+    background: rgba(255,255,255,.03); border: 1px solid var(--border);
+  }
+  .question { padding: 12px; border-radius: 10px; background: #0f152a; border: 1px solid var(--border); }
+  [data-theme="light"] .question { background: #fff; }
+  .options { display: grid; gap: 8px; margin-top: 8px; }
+  .opt { display: flex; gap: 10px; align-items: center; padding: 10px; border-radius: 10px;
+    background: #0e1429; cursor: pointer; border: 1px solid var(--border); }
+  [data-theme="light"] .opt { background: #fff; color: var(--text); }
+  .builder { display: block; gap: 12px; }
+  .qbox { padding: 10px; border-radius: 10px; border: 1px dashed var(--border); background: transparent; margin-bottom: 10px; }
+  .qrow { display: grid; gap: 8px; grid-template-columns: 1fr 60px; margin-bottom: 7px;}
+  .footer { text-align: center; color: var(--sub); padding: 16px 4px 10px 4px; font-size: 13px; background: none; }
 
-/* lists */
-.list{display:flex;flex-direction:column;gap:10px}
-.item{display:flex;gap:12px;align-items:flex-start;padding:10px;
-  background:#0f152a;border-radius:10px;border:1px solid var(--border)}
-[data-theme="light"] .item{background:#f7f8ff}
-.item .grow{flex:1}
-.pill{font-size:11px;padding:6px 10px;border-radius:999px;
-  background:rgba(255,255,255,.03);border:1px solid var(--border)}
+  .small { font-size: 12px; color: var(--sub); }
+  .flex { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .tools { display: flex; gap: 8px; flex-wrap: wrap; }
 
-/* quiz */
-.question{padding:12px;border-radius:10px;background:#0f152a;border:1px solid var(--border)}
-[data-theme="light"] .question{background:#fff}
-.options{display:grid;gap:8px;margin-top:8px}
-.opt{display:flex;gap:10px;align-items:center;padding:10px;border-radius:10px;
-  background:#0e1429;cursor:pointer;border:1px solid var(--border)}
-[data-theme="light"] .opt{background:#fff;color:var(--text)}
-
-/* builder */
-.builder{display:grid;gap:12px}
-.qbox{padding:10px;border-radius:10px;border:1px dashed var(--border);background:transparent}
-.qrow{display:grid;gap:8px;grid-template-columns:1fr 120px}
-
-/* footer */
-.footer{text-align:center;color:var(--sub);padding:18px;font-size:13px}
-
-/* admin modal simple */
-.modal{position:fixed;left:0;top:0;width:100%;height:100%;
-  display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);z-index:200}
-.modal .inner{background:var(--card);padding:16px;border-radius:12px;min-width:320px}
-[data-theme=\"light\"] .modal .inner{background:#fff;color:var(--text)}
-
-.small{font-size:12px;color:var(--sub)}
-.flex{display:flex;gap:8px;align-items:center}
-.tools{display:flex;gap:8px;flex-wrap:wrap}
-
-@media(max-width:700px){
-  .tabs{overflow:auto} .brand{flex-wrap:wrap} .controls{margin-top:10px}
-}
-</style>
-</head>
-<footer id="donateFooter">
-  <span>Gratis untuk semua</span>
-  <a href="https://saweria.co/valitio" target="_blank" rel="noopener noreferrer">
-    💝 Dukung via Saweria
-  </a>
-</footer>
-
-<style>
+  /* Modal responsive + scroll */
+  .modal {
+    position: fixed;
+    left: 0; top: 0;
+    width: 100vw; height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,.5);
+    z-index: 2000;
+    padding: 10px;
+  }
+  .modal .inner {
+    background: var(--card);
+    padding: 12px;
+    border-radius: 12px;
+    min-width: 0;
+    width: 98vw;
+    max-width: 420px;
+    max-height: 92vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    margin: auto;
+    display: block;
+  }
+  [data-theme="light"] .modal .inner {
+    background: #fff; color: var(--text);
+  }
+  /* Modal mobile, always mobile look */
+  @media (max-width: 600px) {
+    .wrap, main, body, html {
+      max-width: 100vw !important;
+      min-width: 0;
+    }
+    .modal .inner {
+      width: 98vw;
+      max-width: 98vw;
+      max-height: 92vh;
+      padding: 9px;
+    }
+  }
+  /* Donasi footer */
   #donateFooter {
     position: fixed;
     bottom: 0; left: 0;
-    width: 100%;
+    width: 100vw;
     background: var(--card);
     border-top: 1px solid var(--border);
     color: var(--text);
-    font-size: 0.9rem;
+    font-size: 1rem;
     text-align: center;
-    padding: 10px;
+    padding: 10px 0 9px 0;
     display: flex;
     justify-content: center;
     gap: 10px;
-    z-index: 999;
+    z-index: 100;
+    box-sizing: border-box;
   }
   #donateFooter a {
     color: #f97316;
@@ -161,7 +192,14 @@ textarea{min-height:80px}
   #donateFooter a:hover {
     text-decoration: underline;
   }
-</style>
+  /* Table for mobile */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { padding: 5px; text-align: left; }
+  th { background: var(--card); color: var(--sub); }
+  /* Hide scrollbars on mobile for modal inner */
+  .modal .inner::-webkit-scrollbar { display: none; }
+  </style>
+<script src="https://puc.poecdn.net/authenticated_preview_page/syncedState.bd4eeeb8e8e02052ee92.js"></script></head>
 
 <body>
 <header>
@@ -170,7 +208,7 @@ textarea{min-height:80px}
       <div class="logo" aria-hidden="true"></div>
       <div>
         <h1>Belajar Harian + Bank Soal</h1>
-        <div class="sub">Versi final — fiture lengkap • Data lokal</div>
+        <div class="sub">Versi final — fitur lengkap • Data lokal</div>
       </div>
     </div>
     <div class="controls" style="margin-left:auto">
@@ -239,7 +277,7 @@ textarea{min-height:80px}
   <!-- ====================== TAB LATIHAN ====================== -->
   <section id="tab-latihan" class="grid" role="tabpanel" aria-hidden="true" style="display:none">
     <div class="card">
-      <div class="head"><h2>Latihan & Paket Soal</h2></div>
+      <div class="head"><h2>Latihan &amp; Paket Soal</h2></div>
       <div class="body">
         <div class="row cols-3">
           <div><label>Paket Soal</label><select id="paket"></select></div>
@@ -272,17 +310,17 @@ textarea{min-height:80px}
     <div class="card">
       <div class="head"><h2>Ringkasan Progres</h2></div>
       <div class="body">
-        <div class="kpi" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
-          <div class="card" style="padding:12px"><div class="small">Tugas aktif</div><div id="kpiTodoAktif" style="font-size:24px;font-weight:800">0</div></div>
-          <div class="card" style="padding:12px"><div class="small">Tugas selesai</div><div id="kpiTodoSelesai" style="font-size:24px;font-weight:800">0</div></div>
-          <div class="card" style="padding:12px"><div class="small">Jadwal</div><div id="kpiJadwal" style="font-size:24px;font-weight:800">0</div></div>
-          <div class="card" style="padding:12px"><div class="small">Rata-rata skor</div><div id="kpiSkor" style="font-size:24px;font-weight:800">0</div></div>
+        <div class="kpi" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
+          <div class="card" style="padding:12px"><div class="small">Tugas aktif</div><div id="kpiTodoAktif" style="font-size:22px;font-weight:800">0</div></div>
+          <div class="card" style="padding:12px"><div class="small">Tugas selesai</div><div id="kpiTodoSelesai" style="font-size:22px;font-weight:800">0</div></div>
+          <div class="card" style="padding:12px"><div class="small">Jadwal</div><div id="kpiJadwal" style="font-size:22px;font-weight:800">0</div></div>
+          <div class="card" style="padding:12px"><div class="small">Rata-rata skor</div><div id="kpiSkor" style="font-size:22px;font-weight:800">0</div></div>
         </div>
       </div>
     </div>
 
     <div class="card">
-      <div class="head"><h2>Data & Backup</h2></div>
+      <div class="head"><h2>Data &amp; Backup</h2></div>
       <div class="body">
         <div class="row cols-3">
           <div><label>Ekspor Data (.json)</label><button class="btn ghost" id="exportJSON">Download JSON</button></div>
@@ -296,7 +334,13 @@ textarea{min-height:80px}
   </section>
 </main>
 
-<div class="footer">v1.0 • Final • Semua data tersimpan lokal di perangkat • Admin control tersedia</div>
+<footer class="footer">v1.0 • Final • Semua data tersimpan lokal di perangkat • Admin control tersedia</footer>
+<footer id="donateFooter">
+  <span>Gratis untuk semua</span>
+  <a href="https://saweria.co/valitio" target="_blank" rel="noopener noreferrer">
+    💝 Dukung via Saweria
+  </a>
+</footer>
 
 <!-- Admin Modal -->
 <div id="modalAdmin" style="display:none" class="modal" aria-hidden="true">
@@ -309,13 +353,13 @@ textarea{min-height:80px}
     <div style="margin-top:10px; text-align:right"><button class="btn ghost" id="closeAdmin">Tutup</button></div>
   </div>
 </div>
+
 <script>
 // Utilities
 const LS = {
   get(k,d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d }catch(e){ return d } },
   set(k,v){ localStorage.setItem(k, JSON.stringify(v)); }
 };
-
 function uid(){ return crypto.randomUUID(); }
 function now(){ return new Date().toLocaleString('id-ID'); }
 
@@ -324,7 +368,6 @@ function now(){ return new Date().toLocaleString('id-ID'); }
   const t = LS.get('app_theme','dark');
   if(t==='light') document.documentElement.setAttribute('data-theme','light');
   const sw = document.getElementById('switchTheme');
-  const knob = document.getElementById('knob');
   function toggle(){
     const cur = document.documentElement.hasAttribute('data-theme') ? 'light':'dark';
     if(cur==='light'){
@@ -352,7 +395,7 @@ tabs.forEach(t=>t.addEventListener('click', ()=>{
   t.setAttribute('aria-selected','true');
   const id=t.dataset.tab;
   Object.values(sections).forEach(s=> s.style.display='none');
-  sections[id].style.display='grid';
+  sections[id].style.display='block';
   if(id==='progres') renderKPI();
   if(id==='latihan') populatePaketOptions();
 }));
@@ -546,39 +589,17 @@ const AdminModal=document.getElementById('modalAdmin');
 document.getElementById('btnAdmin').onclick=showAdmin;
 document.getElementById('closeAdmin').onclick=()=>{AdminModal.style.display='none';AdminModal.setAttribute('aria-hidden','true');};
 
-const Auth={
-  login(){LS.set('isAdmin',true)},
-  logout(){LS.set('isAdmin',false)},
-  isAdmin(){return !!LS.get('isAdmin',false)},
-  async setPassword(p){
-    const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p));
-    LS.set('admin_hash',Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join(''));
-  },
-  async check(p){
-    const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p));
-    const s=Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('');
-    return s===LS.get('admin_hash');
-  }
-};
+const Auth={ login(){LS.set('isAdmin',true)}, logout(){LS.set('isAdmin',false)}, isAdmin(){return !!LS.get('isAdmin',false)}, async setPassword(p){const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p)); LS.set('admin_hash',Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join(''));}, async check(p){const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p)); const s=Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join(''); return s===LS.get('admin_hash'); }};
 
 // fungsi render admin packs
 function renderAdminPacks(){
   const packs=getCustomPacks();
   const div=document.getElementById('adminPacks');
-  if(!Object.keys(packs).length){
-    div.innerHTML='<div class="small">Belum ada paket kustom.</div>'; return;
-  }
-  div.innerHTML=Object.keys(packs).map(k=>
-    `<div class="item"><div class="grow"><b>${k}</b><br><span class="small">${packs[k].tag||''}</span></div>
-     <button class="btn danger" data-delpack="${k}">Hapus</button></div>`
-  ).join('');
+  if(!Object.keys(packs).length){ div.innerHTML='<div class="small">Belum ada paket kustom.</div>'; return; }
+  div.innerHTML=Object.keys(packs).map(k=>`<div class="item"><div class="grow"><b>${k}</b><br><span class="small">${packs[k].tag||''}</span></div><button class="btn danger" data-delpack="${k}">Hapus</button></div>`).join('');
   div.querySelectorAll('[data-delpack]').forEach(b=>b.onclick=()=>{
     if(!confirm('Hapus paket '+b.dataset.delpack+'?'))return;
-    const packs=getCustomPacks();
-    delete packs[b.dataset.delpack];
-    LS.set('packs',packs);
-    renderAdminPacks();
-    populatePaketOptions();
+    const packs=getCustomPacks(); delete packs[b.dataset.delpack]; LS.set('packs',packs); renderAdminPacks(); populatePaketOptions();
   });
 }
 
@@ -587,15 +608,10 @@ function renderLockSelect(){
   const packs=allPacks();
   const div=document.getElementById('lockSelect');
   const locked=LS.get('lockedPacks',[]);
-  if(!Object.keys(packs).length){
-    div.innerHTML='<div class="small">Belum ada paket.</div>'; return;
-  }
+  if(!Object.keys(packs).length){ div.innerHTML='<div class="small">Belum ada paket.</div>'; return; }
   div.innerHTML=Object.keys(packs).map(k=>{
     const isLocked=locked.includes(k);
-    return `<div class="item"><div class="grow">${k}</div>
-      <button class="btn ${isLocked?'warn':'ghost'}" data-lock="${k}">
-        ${isLocked?'Buka':'Kunci'}
-      </button></div>`;
+    return `<div class="item"><div class="grow">${k}</div><button class="btn ${isLocked?'warn':'ghost'}" data-lock="${k}">${isLocked?'Buka':'Kunci'}</button></div>`;
   }).join('');
   div.querySelectorAll('[data-lock]').forEach(b=>b.onclick=()=>{
     const k=b.dataset.lock;
@@ -613,79 +629,31 @@ async function showAdmin(){
   const hash = LS.get('admin_hash', null);
   const adminArea=document.getElementById('adminArea');
   adminArea.innerHTML='';
-
   if(!hash){
-    adminArea.innerHTML = `
-      <div style="margin-top:8px">
-        <label>Set Admin Password (baru)</label>
-        <input id="newPass" type="password">
-      </div>
-      <div style="margin-top:8px">
-        <button class="btn primary" id="setPass">Set Password</button>
-      </div>`;
-    document.getElementById('setPass').onclick=async()=>{
-      const p=document.getElementById('newPass').value.trim();
-      if(!p) return alert('Kosong');
-      await Auth.setPassword(p);
-      alert('Password tersimpan');
-      Auth.login();
-      showAdmin();
-    };
+    adminArea.innerHTML = `<div style="margin-top:8px"><label>Set Admin Password (baru)</label><input id="newPass" type="password"></div><div style="margin-top:8px"><button class="btn primary" id="setPass">Set Password</button></div>`;
+    document.getElementById('setPass').onclick=async()=>{const p=document.getElementById('newPass').value.trim(); if(!p) return alert('Kosong'); await Auth.setPassword(p); alert('Password tersimpan'); Auth.login(); showAdmin();};
     return;
   }
-
   if(!Auth.isAdmin()){
-    adminArea.innerHTML = `
-      <div style="margin-top:8px">
-        <label>Password Admin</label>
-        <input id="loginPass" type="password">
-      </div>
-      <div style="margin-top:8px">
-        <button class="btn primary" id="doLogin">Login</button>
-      </div>`;
-    document.getElementById('doLogin').onclick=async()=>{
-      const p=document.getElementById('loginPass').value;
-      if(!p) return;
-      const ok=await Auth.check(p);
-      if(ok){Auth.login();showAdmin();} else alert('Salah');
-    };
+    adminArea.innerHTML = `<div style="margin-top:8px"><label>Password Admin</label><input id="loginPass" type="password"></div><div style="margin-top:8px"><button class="btn primary" id="doLogin">Login</button></div>`;
+    document.getElementById('doLogin').onclick=async()=>{const p=document.getElementById('loginPass').value; if(!p) return; const ok=await Auth.check(p); if(ok){Auth.login();showAdmin();}else alert('Salah');};
     return;
   }
-
-  // jika admin sudah login
   adminArea.innerHTML=`
-    <div class="logout-bar flex" style="justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--card-bg);padding:8px;border-bottom:1px solid #ccc;z-index:10;">
-      <div class="small">Status: <b>Admin</b></div>
-      <button class="btn ghost" id="btnLogout">Logout</button>
-    </div>
-
+    <div class="small">Status: <b>Admin</b></div>
+    <div style="margin-top:10px"><button class="btn ghost" id="btnLogout">Logout</button></div>
+    <hr>
     <div style="margin-top:8px"><h4>Edit / Hapus Paket Kustom</h4><div id="adminPacks"></div></div>
     <hr>
     <div style="margin-top:8px"><h4>Kunci Paket</h4><div id="lockSelect"></div></div>
     <hr>
-    <div style="margin-top:8px"><h4>Riwayat Latihan</h4>
-      <div class="small">Hapus semua riwayat skor latihan.</div>
-      <div style="margin-top:8px">
-        <button class="btn danger" id="adminClearSkor">🗑 Hapus Riwayat Skor</button>
-      </div>
-    </div>
+    <div style="margin-top:8px"><h4>Riwayat Latihan</h4><div class="small">Hapus semua riwayat skor latihan.</div><div style="margin-top:8px"><button class="btn danger" id="adminClearSkor">🗑 Hapus Riwayat Skor</button></div></div>
     <hr>
-    <div style="margin-top:8px"><h4>Ganti Password Admin</h4>
-      <label>Password Lama</label><input id="oldPass" type="password">
-      <label>Password Baru</label><input id="newPass2" type="password">
-      <div style="margin-top:8px">
-        <button class="btn primary" id="changePass">Ganti Password</button>
-      </div>
-    </div>
+    <div style="margin-top:8px"><h4>Ganti Password Admin</h4><label>Password Lama</label><input id="oldPass" type="password"><label>Password Baru</label><input id="newPass2" type="password"><div style="margin-top:8px"><button class="btn primary" id="changePass">Ganti Password</button></div></div>
   `;
-
-  document.getElementById('btnLogout').onclick=()=>{
-    Auth.logout();
-    showAdmin();
-  };
+  document.getElementById('btnLogout').onclick=()=>{Auth.logout();showAdmin();};
   renderAdminPacks();
   renderLockSelect();
-
   if(document.getElementById('adminClearSkor')){
     document.getElementById('adminClearSkor').onclick=()=>{
       if(!confirm('Yakin ingin hapus semua riwayat skor latihan?')) return;
@@ -694,12 +662,26 @@ async function showAdmin(){
       alert('Riwayat skor berhasil dihapus');
     };
   }
+  if(document.getElementById('changePass')){
+    document.getElementById('changePass').onclick=async()=>{
+      const oldp=document.getElementById('oldPass').value;
+      const newp=document.getElementById('newPass2').value;
+      if(!oldp||!newp) return alert('Isi semua kolom');
+      const ok=await Auth.check(oldp);
+      if(!ok) return alert('Password lama salah');
+      await Auth.setPassword(newp);
+      alert('Password admin diganti');
+      Auth.logout();
+      showAdmin();
+    };
+  }
 }
-     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("service-worker.js")
-        .then(() => console.log("Service Worker registered"))
-        .catch(err => console.error("SW registration failed:", err));
-    }
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js")
+    .then(() => console.log("Service Worker registered"))
+    .catch(err => console.error("SW registration failed:", err));
+}
 </script>
-</body>
-</html>
+
+
+</body></html>
