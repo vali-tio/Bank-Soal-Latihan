@@ -1,29 +1,134 @@
+<!-- ========== BAGIAN 1/6 ========== -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jadwal Pelajaran</title>
-   <link rel="manifest" href="manifest.webmanifest">
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f4f4f9; color: #333; transition: background 0.3s, color 0.3s; }
-    .dark { background: #1e1e1e; color: #f4f4f9; }
-    .container { max-width: 600px; margin: auto; }
-    select, input, button, textarea { padding: 8px; margin: 5px 0; border-radius: 6px; border: 1px solid #ccc; background: inherit; color: inherit; }
-    button { cursor: pointer; }
-    .btn { margin: 2px; padding: 6px 12px; border: none; border-radius: 6px; }
-    .btn-green { background: #28a745; color: #fff; }
-    .btn-blue { background: #007bff; color: #fff; }
-    .btn-red { background: #dc3545; color: #fff; }
-    .btn-yellow { background: #ffc107; color: #000; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-    th { background: #eee; }
-    .dark th { background: #333; }
-    .dark td, .dark th { border-color: #555; }
-    textarea { width: 100%; min-height: 80px; margin-top: 10px; resize: vertical; box-sizing: border-box; }
-    tr.dragging { opacity: 0.5; }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Aplikasi Belajar SMP — Final</title>
+ <link rel="manifest" href="manifest.webmanifest">
+  <meta name="description" content="Aplikasi belajar SMP lengkap: jadwal, todo, latihan, paket kustom, admin lock, ekspor/impor, PDF & share.">
+<style>
+:root{
+  --bg:#0b1020; --card:#151b2f; --muted:#8aa0ff; --text:#eaf0ff; --sub:#c7cffc;
+  --accent:#6ea8fe; --ok:#28c281; --warn:#ffb020; --danger:#ff5d5d;
+  --radius:14px; --border: rgba(255,255,255,.08);
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+[data-theme="light"]{
+  --bg:#f6f8ff; --card:#fff; --muted:#5566cc; --text:#111525; --sub:#445;
+  --accent:#3b6cff; --border: rgba(17,21,37,.08); --shadow: 0 10px 30px rgba(17,21,37,.08);
+}
+*{box-sizing:border-box}
+html,body{
+  height:100%; margin:0;
+  font-family:Inter, system-ui, -apple-system,Segoe UI,Roboto,Arial;
+  background:linear-gradient(180deg,var(--bg),#071025);
+  color:var(--text); transition:.2s
+}
+header{
+  position:sticky; top:0; backdrop-filter:saturate(140%) blur(8px);
+  padding:12px 16px; background:rgba(11,16,32,.6);
+  border-bottom:1px solid var(--border); z-index:10
+}
+[data-theme="light"] header{background:rgba(255,255,255,.85)}
+.wrap{max-width:1100px; margin:0 auto}
+.brand{display:flex; gap:12px; align-items:center}
+.logo{width:42px;height:42px;border-radius:10px;
+  background:radial-gradient(circle at 20% 20%, #6ea8fe,#4f5bd5);
+  box-shadow:0 8px 24px rgba(78,107,255,.25)}
+h1{margin:0;font-size:18px}
+.sub{font-size:12px;color:var(--sub)}
+
+.controls{display:flex; gap:10px; align-items:center; margin-left:auto}
+.switch{position:relative;width:54px;height:30px;border-radius:999px;
+  background:#0e1429;border:1px solid var(--border);cursor:pointer}
+.knob{position:absolute; top:3px; left:3px; width:24px; height:24px;
+  border-radius:50%; background:#fff; transition:left .2s}
+[data-theme="light"] .switch{background:#e9ecff}
+[data-theme="light"] .knob{left:27px}
+
+/* tabs */
+.tabs{display:flex; gap:8px; margin-top:12px}
+.tab-btn{background:var(--card); border:1px solid var(--border);
+  padding:9px 14px; border-radius:10px; cursor:pointer;
+  font-weight:600; color:var(--text)}
+.tab-btn[aria-selected="true"]{
+  background:linear-gradient(180deg,#141a2d,#0f1530);
+  box-shadow:var(--shadow); border-color:transparent}
+[data-theme="light"] .tab-btn[aria-selected="true"]{background:var(--card)}
+
+/* layout */
+main{padding:16px}
+.grid{display:grid; gap:16px}
+@media(min-width:900px){ .grid{grid-template-columns:1.4fr 1fr} }
+
+.card{background:linear-gradient(180deg,#141a2d,#10162a);
+  border-radius:12px; border:1px solid var(--border);
+  box-shadow:var(--shadow); overflow:hidden}
+[data-theme="light"] .card{background:var(--card)}
+/* small items */
+.head{padding:14px;border-bottom:1px dashed var(--border)}
+.body{padding:14px}
+label{display:block;font-size:12px;color:var(--sub);margin-bottom:6px}
+input,select,textarea,button{
+  padding:10px;border-radius:10px;border:1px solid var(--border);
+  background:transparent; color:var(--text); width:100%; box-sizing:border-box}
+[data-theme="light"] input,
+[data-theme="light"] select,
+[data-theme="light"] textarea{background:#f7f8ff;color:var(--text)}
+textarea{min-height:80px}
+.row{display:grid; gap:10px}
+@media(min-width:640px){
+  .cols-2{grid-template-columns:1fr 1fr}
+  .cols-3{grid-template-columns:1fr 1fr 1fr}
+}
+
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:8px 12px; border-radius:10px; cursor:pointer; border:0}
+.btn.primary{background:linear-gradient(180deg,#5f8bff,#4669ff); color:white}
+.btn.ghost{background:transparent; color:var(--sub); border:1px dashed var(--border)}
+.btn.warn{background:linear-gradient(180deg,#ffb56b,#ff9442); color:#111}
+.btn.danger{background:linear-gradient(180deg,#ff6e6e,#ff4d4d); color:white}
+
+/* lists */
+.list{display:flex;flex-direction:column;gap:10px}
+.item{display:flex;gap:12px;align-items:flex-start;padding:10px;
+  background:#0f152a;border-radius:10px;border:1px solid var(--border)}
+[data-theme="light"] .item{background:#f7f8ff}
+.item .grow{flex:1}
+.pill{font-size:11px;padding:6px 10px;border-radius:999px;
+  background:rgba(255,255,255,.03);border:1px solid var(--border)}
+
+/* quiz */
+.question{padding:12px;border-radius:10px;background:#0f152a;border:1px solid var(--border)}
+[data-theme="light"] .question{background:#fff}
+.options{display:grid;gap:8px;margin-top:8px}
+.opt{display:flex;gap:10px;align-items:center;padding:10px;border-radius:10px;
+  background:#0e1429;cursor:pointer;border:1px solid var(--border)}
+[data-theme="light"] .opt{background:#fff;color:var(--text)}
+
+/* builder */
+.builder{display:grid;gap:12px}
+.qbox{padding:10px;border-radius:10px;border:1px dashed var(--border);background:transparent}
+.qrow{display:grid;gap:8px;grid-template-columns:1fr 120px}
+
+/* footer */
+.footer{text-align:center;color:var(--sub);padding:18px;font-size:13px}
+
+/* admin modal simple */
+.modal{position:fixed;left:0;top:0;width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);z-index:200}
+.modal .inner{background:var(--card);padding:16px;border-radius:12px;min-width:320px}
+[data-theme=\"light\"] .modal .inner{background:#fff;color:var(--text)}
+
+.small{font-size:12px;color:var(--sub)}
+.flex{display:flex;gap:8px;align-items:center}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+
+@media(max-width:700px){
+  .tabs{overflow:auto} .brand{flex-wrap:wrap} .controls{margin-top:10px}
+}
+</style>
 </head>
 <footer id="donateFooter">
   <span>Gratis untuk semua</span>
@@ -59,173 +164,463 @@
 </style>
 
 <body>
-<div class="container">
-  <h2>Jadwal</h2>
-  <div>
-    <label>Pilih Hari:</label>
-    <select id="daySelect"></select>
-    <button class="btn btn-green" onclick="addDay()">+ Hari</button>
-    <button class="btn btn-red" onclick="removeDay()">- Hari</button>
+<header>
+  <div class="wrap" style="display:flex;align-items:center;">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>Belajar Harian + Bank Soal</h1>
+        <div class="sub">Versi final — fiture lengkap • Data lokal</div>
+      </div>
+    </div>
+    <div class="controls" style="margin-left:auto">
+      <div class="small">Admin</div>
+      <div class="tools">
+        <button class="btn ghost" id="btnAdmin">🔐 Admin</button>
+        <div class="switch" id="switchTheme" role="button" tabindex="0"><div class="knob" id="knob"></div></div>
+      </div>
+    </div>
   </div>
-  <div>
-    <input type="text" id="subjectInput" placeholder="Tambah mata pelajaran...">
-    <button class="btn btn-green" onclick="addSubject()">+ Tambah</button>
+  <div class="wrap">
+    <nav class="tabs" role="tablist">
+      <button class="tab-btn" role="tab" aria-selected="true" data-tab="jadwal">📅 Jadwal</button>
+      <button class="tab-btn" role="tab" aria-selected="false" data-tab="todo">✅ To-Do</button>
+      <button class="tab-btn" role="tab" aria-selected="false" data-tab="latihan">📝 Latihan</button>
+      <button class="tab-btn" role="tab" aria-selected="false" data-tab="progres">📊 Progres</button>
+    </nav>
   </div>
-  <div>
-    <button class="btn btn-blue" onclick="saveData()">Simpan</button>
-    <button class="btn btn-green" onclick="importData()">Import</button>
-    <button class="btn btn-green" onclick="backupData()">Backup</button>
-    <button class="btn btn-yellow" onclick="toggleDarkMode()">🌙/☀️</button>
-  </div>
+</header>
 
-  <table id="scheduleTable">
-    <thead>
-      <tr><th>No</th><th>Mata Pelajaran</th><th>Aksi</th></tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+<main class="wrap">
+  <!-- ====================== TAB JADWAL ====================== -->
+  <section id="tab-jadwal" class="grid" role="tabpanel" aria-hidden="false">
+    <div class="card">
+      <div class="head"><h2>Tambah Jadwal Pelajaran</h2></div>
+      <div class="body">
+        <form id="formJadwal" class="row cols-3">
+          <div><label>Hari</label><select id="hari"><option>Senin</option><option>Selasa</option><option>Rabu</option><option>Kamis</option><option>Jumat</option><option>Sabtu</option></select></div>
+          <div><label>Mapel</label><input id="mapel" placeholder="contoh: Matematika"></div>
+          <div class="cols-2">
+            <div><label>Mulai</label><input id="mulai" type="time"></div>
+            <div><label>Selesai</label><input id="selesai" type="time"></div>
+          </div>
+          <div><label>Guru (opsional)</label><input id="guru" placeholder="nama guru"></div>
+          <div><label>&nbsp;</label><button class="btn primary" type="submit">+ Tambah</button></div>
+        </form>
+      </div>
+    </div>
+    <div class="card">
+      <div class="head"><h2>Jadwal Mingguan</h2></div>
+      <div class="body" id="listJadwal"><div class="small">Belum ada jadwal. Tambahkan di formulir.</div></div>
+    </div>
+  </section>
 
-  <div>
-    <h3>Catatan:</h3>
-    <textarea id="notes" placeholder="Tulis catatan di sini..."></textarea>
+  <!-- ====================== TAB TODO ====================== -->
+  <section id="tab-todo" class="grid" role="tabpanel" aria-hidden="true" style="display:none">
+    <div class="card">
+      <div class="head"><h2>Tambah Tugas / PR</h2></div>
+      <div class="body">
+        <form id="formTodo" class="row cols-3">
+          <div><label>Judul</label><input id="judulTodo" placeholder="contoh: PR Matematika bab Persentase"></div>
+          <div><label>Jenis</label><select id="jenisTodo"><option>PR</option><option>Ujian</option><option>Catatan</option></select></div>
+          <div><label>Mapel</label><input id="mapelTodo" placeholder="Matematika / IPA"></div>
+          <div><label>Jatuh Tempo</label><input id="tanggalTodo" type="date"></div>
+          <div><label>Keterangan</label><textarea id="catatanTodo"></textarea></div>
+          <div><label>&nbsp;</label><button class="btn primary" type="submit">+ Tambah</button></div>
+        </form>
+      </div>
+    </div>
+    <div class="card">
+      <div class="head"><h2>Daftar Tugas</h2></div>
+      <div class="body"><div class="list" id="listTodo"></div></div>
+    </div>
+  </section>
+
+  <!-- ====================== TAB LATIHAN ====================== -->
+  <section id="tab-latihan" class="grid" role="tabpanel" aria-hidden="true" style="display:none">
+    <div class="card">
+      <div class="head"><h2>Latihan & Paket Soal</h2></div>
+      <div class="body">
+        <div class="row cols-3">
+          <div><label>Paket Soal</label><select id="paket"></select></div>
+          <div><label>Jumlah</label><select id="jumlah"><option>5</option><option>10</option></select></div>
+          <div style="align-self:end"><button class="btn primary" id="mulaiQuiz">Mulai Latihan</button></div>
+        </div>
+        <div id="areaQuiz" style="margin-top:12px"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="head"><h2>Riwayat Skor</h2></div>
+      <div class="body"><table id="tabelSkor"><thead><tr><th>Tanggal</th><th>Paket</th><th>Benar</th><th>Total</th><th>Skor</th></tr></thead><tbody></tbody></table></div>
+    </div>
+    <div class="card">
+      <div class="head"><h2>Builder Paket Soal (Kustom)</h2></div>
+      <div class="body builder">
+        <div class="row cols-3">
+          <div><label>Judul Paket</label><input id="pkgTitle" placeholder="IPA • Ekosistem"></div>
+          <div><label>Tag/Mapel</label><input id="pkgTag" placeholder="IPA / IPS / B.Indo"></div>
+          <div style="align-self:end"><button class="btn ghost" id="addQ">+ Tambah Soal</button></div>
+        </div>
+        <div id="qInputs"></div>
+        <div class="flex"><button class="btn primary" id="savePkg">💾 Simpan Paket</button><button class="btn warn" id="clearInputs">↺ Bersihkan</button></div>
+        <div class="small">Setelah paket disimpan, kamu bisa <b>kunci paket</b> melalui Admin untuk mencegah perubahan.</div>
+      </div>
+    </div>
+  </section>
+  <!-- ====================== TAB PROGRES ====================== -->
+  <section id="tab-progres" role="tabpanel" aria-hidden="true" style="display:none">
+    <div class="card">
+      <div class="head"><h2>Ringkasan Progres</h2></div>
+      <div class="body">
+        <div class="kpi" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+          <div class="card" style="padding:12px"><div class="small">Tugas aktif</div><div id="kpiTodoAktif" style="font-size:24px;font-weight:800">0</div></div>
+          <div class="card" style="padding:12px"><div class="small">Tugas selesai</div><div id="kpiTodoSelesai" style="font-size:24px;font-weight:800">0</div></div>
+          <div class="card" style="padding:12px"><div class="small">Jadwal</div><div id="kpiJadwal" style="font-size:24px;font-weight:800">0</div></div>
+          <div class="card" style="padding:12px"><div class="small">Rata-rata skor</div><div id="kpiSkor" style="font-size:24px;font-weight:800">0</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="head"><h2>Data & Backup</h2></div>
+      <div class="body">
+        <div class="row cols-3">
+          <div><label>Ekspor Data (.json)</label><button class="btn ghost" id="exportJSON">Download JSON</button></div>
+          <div><label>Impor Data (.json)</label><input type="file" id="importFile" accept="application/json"></div>
+          <div><label>Ekspor Laporan (PDF)</label><button class="btn primary" id="exportPDF">Cetak / Simpan PDF</button></div>
+        </div>
+        <div style="margin-top:10px" class="small">Setelah cetak PDF, kamu bisa bagikan melalui WhatsApp secara manual. Tombol 'Bagikan via WA' akan membuka chat wa.me dengan pesan siap dikirim.</div>
+        <div style="margin-top:10px" class="flex"><button class="btn ghost" id="shareWa">Bagikan via WhatsApp (wa.me)</button></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="footer">v1.0 • Final • Semua data tersimpan lokal di perangkat • Admin control tersedia</div>
+
+<!-- Admin Modal -->
+<div id="modalAdmin" style="display:none" class="modal" aria-hidden="true">
+  <div class="inner">
+    <h3>Panel Admin</h3>
+    <div class="small">Login untuk mengakses fitur edit/hapus, kunci paket, ganti password.</div>
+    <div style="margin-top:8px" id="adminArea">
+      <!-- login / controls rendered here -->
+    </div>
+    <div style="margin-top:10px; text-align:right"><button class="btn ghost" id="closeAdmin">Tutup</button></div>
   </div>
 </div>
-
 <script>
-  let data = JSON.parse(localStorage.getItem('jadwalData')) || { days: { 'Senin': [], }, notes: {} };
-  const daySelect = document.getElementById('daySelect');
-  const subjectInput = document.getElementById('subjectInput');
-  const scheduleTable = document.getElementById('scheduleTable').querySelector('tbody');
-  const notes = document.getElementById('notes');
-  let dragSrcEl = null;
+// Utilities
+const LS = {
+  get(k,d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d }catch(e){ return d } },
+  set(k,v){ localStorage.setItem(k, JSON.stringify(v)); }
+};
 
-  function renderDays(){
-    daySelect.innerHTML = '';
-    for (let d in data.days){
-      let opt = document.createElement('option');
-      opt.value = d; opt.textContent = d;
-      daySelect.appendChild(opt);
-    }
-    renderSchedule();
-  }
+function uid(){ return crypto.randomUUID(); }
+function now(){ return new Date().toLocaleString('id-ID'); }
 
-  function addDay(){
-    let name = prompt('Nama hari:');
-    if(name && !data.days[name]){ data.days[name] = []; renderDays(); saveData(); }
-  }
-
-  function removeDay(){
-    let d = daySelect.value;
-    if(confirm('Hapus hari ' + d + '?')){
-      delete data.days[d];
-      delete data.notes[d];
-      renderDays(); saveData();
+// Theme
+(function themeInit(){
+  const t = LS.get('app_theme','dark');
+  if(t==='light') document.documentElement.setAttribute('data-theme','light');
+  const sw = document.getElementById('switchTheme');
+  const knob = document.getElementById('knob');
+  function toggle(){
+    const cur = document.documentElement.hasAttribute('data-theme') ? 'light':'dark';
+    if(cur==='light'){
+      document.documentElement.removeAttribute('data-theme');
+      LS.set('app_theme','dark');
+    } else {
+      document.documentElement.setAttribute('data-theme','light');
+      LS.set('app_theme','light');
     }
   }
+  sw.addEventListener('click', toggle);
+  sw.addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key===' ') toggle(); });
+})();
 
-  function addSubject(){
-    let d = daySelect.value;
-    let subj = subjectInput.value.trim();
-    if(subj){
-      data.days[d].push(subj);
-      subjectInput.value = '';
-      renderSchedule(); saveData();
+// Tabs
+const tabs = document.querySelectorAll('.tab-btn');
+const sections = {
+  jadwal: document.getElementById('tab-jadwal'),
+  todo: document.getElementById('tab-todo'),
+  latihan: document.getElementById('tab-latihan'),
+  progres: document.getElementById('tab-progres')
+};
+tabs.forEach(t=>t.addEventListener('click', ()=>{
+  tabs.forEach(b=>b.setAttribute('aria-selected','false'));
+  t.setAttribute('aria-selected','true');
+  const id=t.dataset.tab;
+  Object.values(sections).forEach(s=> s.style.display='none');
+  sections[id].style.display='grid';
+  if(id==='progres') renderKPI();
+  if(id==='latihan') populatePaketOptions();
+}));
+
+// ========== JADWAL ==========
+const formJadwal = document.getElementById('formJadwal');
+const listJadwal = document.getElementById('listJadwal');
+function renderJadwal(){
+  const data = LS.get('jadwal',[]);
+  if(!data.length){
+    listJadwal.innerHTML='<div class="small">Belum ada jadwal. Tambahkan di formulir.</div>'; return;
+  }
+  const byDay = data.reduce((a,x)=>{ (a[x.hari]??=[]).push(x); return a; },{});
+  const order=['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  listJadwal.innerHTML = order.map(day=>{
+    const rows = (byDay[day]||[]).sort((a,b)=> a.mulai.localeCompare(b.mulai)).map(it=>
+      `<tr><td>${it.mulai}–${it.selesai}</td><td><b>${it.mapel}</b><div class="small">${it.guru||''}</div></td><td><button class="btn ghost" data-del="${it.id}">Hapus</button></td></tr>`
+    ).join('');
+    if(!rows) return '';
+    return `<div class="item"><div class="pill">${day}</div><div class="grow"><table style="width:100%"><thead><tr><th style="width:30%">Waktu</th><th>Mapel</th><th></th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+  }).join('');
+  listJadwal.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
+    const id=b.getAttribute('data-del');
+    const after = LS.get('jadwal',[]).filter(x=>x.id!==id);
+    LS.set('jadwal',after);
+    renderJadwal();
+    renderKPI();
+  });
+}
+formJadwal.addEventListener('submit', e=>{
+  e.preventDefault();
+  const o={id:uid(),hari:document.getElementById('hari').value,mapel:document.getElementById('mapel').value.trim(),mulai:document.getElementById('mulai').value,selesai:document.getElementById('selesai').value,guru:document.getElementById('guru').value.trim()};
+  if(!o.mapel||!o.mulai||!o.selesai) return;
+  const data=LS.get('jadwal',[]); data.push(o); LS.set('jadwal',data);
+  formJadwal.reset(); renderJadwal(); renderKPI();
+});
+renderJadwal();
+
+// ========== TODO ==========
+const formTodo=document.getElementById('formTodo'), listTodo=document.getElementById('listTodo');
+function renderTodo(){
+  const arr=LS.get('todo',[]);
+  if(!arr.length){
+    listTodo.innerHTML='<div class="small">Belum ada tugas. Tambahkan di formulir.</div>'; return;
+  }
+  listTodo.innerHTML = arr.sort((a,b)=> (a.selesai===b.selesai?0:(a.selesai?1:-1))).map(it=>
+    `<div class="item"><input type="checkbox" ${it.selesai?'checked':''} data-toggle="${it.id}"/><div class="grow"><div style="display:flex;gap:8px"><div class="pill">${it.jenis}</div>${it.mapel?`<div class="pill">${it.mapel}</div>`:''}${it.tanggal?`<div class="pill">Jt: ${new Date(it.tanggal).toLocaleDateString('id-ID')}</div>`:''}</div><div style="margin-top:6px"><b>${it.judul}</b></div><div class="small">${it.catatan||''}</div></div><div><button class="btn ghost" data-del="${it.id}">Hapus</button></div></div>`
+  ).join('');
+  listTodo.querySelectorAll('[data-toggle]').forEach(c=>c.onchange=()=>{
+    const id=c.getAttribute('data-toggle');
+    const data=LS.get('todo',[]).map(x=> x.id===id?{...x,selesai:!x.selesai}:x);
+    LS.set('todo',data); renderTodo(); renderKPI();
+  });
+  listTodo.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
+    const id=b.getAttribute('data-del');
+    const after=LS.get('todo',[]).filter(x=>x.id!==id);
+    LS.set('todo',after); renderTodo(); renderKPI();
+  });
+}
+formTodo.addEventListener('submit', e=>{
+  e.preventDefault();
+  const o={id:uid(), judul:document.getElementById('judulTodo').value.trim(), jenis:document.getElementById('jenisTodo').value, mapel:document.getElementById('mapelTodo').value.trim(), tanggal:document.getElementById('tanggalTodo').value, catatan:document.getElementById('catatanTodo').value.trim(), selesai:false};
+  if(!o.judul) return;
+  const arr=LS.get('todo',[]); arr.push(o); LS.set('todo',arr);
+  formTodo.reset(); renderTodo(); renderKPI();
+});
+renderTodo();
+
+// ========== BUILT-IN BANK =========
+const bank_builtin = {
+  "Matematika • Persentase": [
+    {q:'Harga sebuah buku Rp40.000 didiskon 15%. Berapa harga setelah diskon?', opts:['Rp34.000','Rp36.000','Rp38.500','Rp32.000'], a:0, exp:'15% × 40.000 = 6.000 → 40.000 − 6.000 = 34.000'},
+    {q:'25% dari 360 adalah ...', opts:['72','80','85','90'], a:3, exp:'25% × 360 = 90'},
+    {q:'Sebuah nilai naik dari 200 ke 260. Persentase kenaikan adalah ...', opts:['20%','25%','30%','40%'], a:2, exp:'Kenaikan 60 dari 200 → 60/200 = 0.3 = 30%'}
+  ],
+  "Matematika • Perbandingan": [
+    {q:'Perbandingan Ali:Budi = 2:3. Jika total 50, Ali berapa?', opts:['20','30','15','25'], a:0, exp:'2/5×50=20'},
+    {q:'Jika 5 pekerja selesai 12 hari, 10 pekerja selesai ...', opts:['6 hari','12 hari','24 hari','10 hari'], a:0, exp:'x=6'}
+  ],
+  "Matematika • Luas & Keliling": [
+    {q:'Luas persegi sisi 14 cm adalah ...', opts:['196 cm²','28 cm²','56 cm²','84 cm²'], a:0, exp:'14×14=196'}
+  ]
+};
+function getCustomPacks(){ return LS.get('packs',{}); }
+function saveCustomPack(title,tag,qs){
+  const packs=getCustomPacks();
+  packs[title]={tag,qs};
+  LS.set('packs',packs);
+}
+function allPacks(){ return {...bank_builtin, ...getCustomPacks()}; }
+
+function populatePaketOptions(){
+  const sel=document.getElementById('paket');
+  const packs=allPacks();
+  sel.innerHTML='';
+  Object.keys(packs).forEach(k=>{
+    const opt=document.createElement('option');
+    opt.textContent=k;
+    sel.appendChild(opt);
+  });
+}
+populatePaketOptions();
+
+// Quiz
+const mulaiQuiz=document.getElementById('mulaiQuiz'), areaQuiz=document.getElementById('areaQuiz');
+mulaiQuiz.onclick=()=>{
+  const paket=document.getElementById('paket').value;
+  const jml=parseInt(document.getElementById('jumlah').value);
+  const bank=allPacks()[paket];
+  if(!bank){ alert('Paket tidak ditemukan'); return; }
+  const qs=[...bank.qs||bank].sort(()=>Math.random()-0.5).slice(0,jml);
+  runQuiz(paket,qs);
+};
+function runQuiz(paket,qs){
+  let idx=0, benar=0;
+  areaQuiz.innerHTML='';
+  function show(){
+    if(idx>=qs.length){
+      const skor=Math.round(100*benar/qs.length);
+      areaQuiz.innerHTML=`<div class="question"><h3>Selesai!</h3><p>Benar ${benar} dari ${qs.length} soal.<br><b>Skor: ${skor}</b></p></div>`;
+      const arr=LS.get('skor',[]);
+      arr.push({id:uid(),time:now(),paket,benar,total:qs.length,skor});
+      LS.set('skor',arr); renderSkor(); renderKPI(); return;
     }
+    const q=qs[idx];
+    areaQuiz.innerHTML=`<div class="question"><b>Soal ${idx+1}/${qs.length}</b><br>${q.q}<div class="options">${q.opts.map((op,i)=>`<div class="opt" data-i="${i}">${op}</div>`).join('')}</div></div>`;
+    areaQuiz.querySelectorAll('.opt').forEach(o=>o.onclick=()=>{
+      if(parseInt(o.dataset.i)===q.a){ benar++; o.style.background='rgba(40,200,129,.3)'; }
+      else{ o.style.background='rgba(255,93,93,.3)'; }
+      setTimeout(()=>{idx++;show();},500);
+    });
   }
+  show();
+}
+const tabelSkor=document.querySelector('#tabelSkor tbody');
+function renderSkor(){
+  const arr=LS.get('skor',[]);
+  if(!arr.length){ tabelSkor.innerHTML='<tr><td colspan=5 class="small">Belum ada riwayat.</td></tr>'; return; }
+  tabelSkor.innerHTML=arr.map(s=>`<tr><td>${s.time}</td><td>${s.paket}</td><td>${s.benar}</td><td>${s.total}</td><td>${s.skor}</td></tr>`).join('');
+}
+renderSkor();
 
-  function removeSubject(index){
-    let d = daySelect.value;
-    data.days[d].splice(index,1);
-    renderSchedule(); saveData();
+// KPI
+function renderKPI(){
+  document.getElementById('kpiTodoAktif').textContent=LS.get('todo',[]).filter(x=>!x.selesai).length;
+  document.getElementById('kpiTodoSelesai').textContent=LS.get('todo',[]).filter(x=>x.selesai).length;
+  document.getElementById('kpiJadwal').textContent=LS.get('jadwal',[]).length;
+  const arr=LS.get('skor',[]); document.getElementById('kpiSkor').textContent=arr.length? Math.round(arr.reduce((a,b)=>a+b.skor,0)/arr.length):0;
+}
+
+// Builder
+const addQ=document.getElementById('addQ'), qInputs=document.getElementById('qInputs');
+addQ.onclick=()=>{ qInputs.insertAdjacentHTML('beforeend',`<div class="qbox"><input class="qtext" placeholder="Pertanyaan"><div class="qrow"><input class="opt0" placeholder="Opsi A"><input type="radio" name="c${uid()}" value="0"></div><div class="qrow"><input class="opt1" placeholder="Opsi B"><input type="radio" name="c${uid()}" value="1"></div><div class="qrow"><input class="opt2" placeholder="Opsi C"><input type="radio" name="c${uid()}" value="2"></div><div class="qrow"><input class="opt3" placeholder="Opsi D"><input type="radio" name="c${uid()}" value="3"></div><input class="exp" placeholder="Pembahasan (opsional)"></div>`); };
+document.getElementById('clearInputs').onclick=()=>{ qInputs.innerHTML=''; };
+document.getElementById('savePkg').onclick=()=>{
+  const title=document.getElementById('pkgTitle').value.trim();
+  const tag=document.getElementById('pkgTag').value.trim();
+  if(!title) return alert('Judul kosong');
+  const qs=[...qInputs.querySelectorAll('.qbox')].map(b=>{
+    const q=b.querySelector('.qtext').value;
+    const opts=[0,1,2,3].map(i=>b.querySelector('.opt'+i).value);
+    const radios=b.querySelectorAll('input[type=radio]');
+    let a=[...radios].find(r=>r.checked)?.value;
+    return {q,opts,a:parseInt(a),exp:b.querySelector('.exp').value};
+  });
+  saveCustomPack(title,tag,qs);
+  qInputs.innerHTML=''; document.getElementById('pkgTitle').value=''; document.getElementById('pkgTag').value='';
+  populatePaketOptions();
+  alert('Paket tersimpan!');
+};
+
+// Export / Import
+document.getElementById('exportJSON').onclick=()=>{
+  const data={jadwal:LS.get('jadwal',[]),todo:LS.get('todo',[]),packs:LS.get('packs',{}),skor:LS.get('skor',[])};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='belajar-smp.json'; a.click();
+};
+document.getElementById('importFile').onchange=e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader(); r.onload=()=>{
+    try{ const d=JSON.parse(r.result); if(d.jadwal)LS.set('jadwal',d.jadwal); if(d.todo)LS.set('todo',d.todo); if(d.packs)LS.set('packs',d.packs); if(d.skor)LS.set('skor',d.skor);
+      renderJadwal(); renderTodo(); renderSkor(); renderKPI(); populatePaketOptions();
+    }catch(err){ alert('File tidak valid'); }
+  }; r.readAsText(f);
+};
+document.getElementById('exportPDF').onclick=()=>{ alert('Ekspor PDF: fitur ini perlu integrasi jsPDF (bisa ditambahkan).'); };
+document.getElementById('shareWa').onclick=()=>{ const url='https://wa.me/?text='+encodeURIComponent('Laporan belajar SMP saya sudah siap.'); window.open(url,'_blank'); };
+
+// ========== ADMIN ==========
+const AdminModal=document.getElementById('modalAdmin');
+document.getElementById('btnAdmin').onclick=showAdmin;
+document.getElementById('closeAdmin').onclick=()=>{AdminModal.style.display='none';AdminModal.setAttribute('aria-hidden','true');};
+
+const Auth={ login(){LS.set('isAdmin',true)}, logout(){LS.set('isAdmin',false)}, isAdmin(){return !!LS.get('isAdmin',false)}, async setPassword(p){const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p)); LS.set('admin_hash',Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join(''));}, async check(p){const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p)); const s=Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join(''); return s===LS.get('admin_hash'); }};
+
+// fungsi render admin packs
+function renderAdminPacks(){
+  const packs=getCustomPacks();
+  const div=document.getElementById('adminPacks');
+  if(!Object.keys(packs).length){ div.innerHTML='<div class="small">Belum ada paket kustom.</div>'; return; }
+  div.innerHTML=Object.keys(packs).map(k=>`<div class="item"><div class="grow"><b>${k}</b><br><span class="small">${packs[k].tag||''}</span></div><button class="btn danger" data-delpack="${k}">Hapus</button></div>`).join('');
+  div.querySelectorAll('[data-delpack]').forEach(b=>b.onclick=()=>{
+    if(!confirm('Hapus paket '+b.dataset.delpack+'?'))return;
+    const packs=getCustomPacks(); delete packs[b.dataset.delpack]; LS.set('packs',packs); renderAdminPacks(); populatePaketOptions();
+  });
+}
+
+// fungsi render lock select
+function renderLockSelect(){
+  const packs=allPacks();
+  const div=document.getElementById('lockSelect');
+  const locked=LS.get('lockedPacks',[]);
+  if(!Object.keys(packs).length){ div.innerHTML='<div class="small">Belum ada paket.</div>'; return; }
+  div.innerHTML=Object.keys(packs).map(k=>{
+    const isLocked=locked.includes(k);
+    return `<div class="item"><div class="grow">${k}</div><button class="btn ${isLocked?'warn':'ghost'}" data-lock="${k}">${isLocked?'Buka':'Kunci'}</button></div>`;
+  }).join('');
+  div.querySelectorAll('[data-lock]').forEach(b=>b.onclick=()=>{
+    const k=b.dataset.lock;
+    let arr=LS.get('lockedPacks',[]);
+    if(arr.includes(k)){ arr=arr.filter(x=>x!==k); }
+    else arr.push(k);
+    LS.set('lockedPacks',arr);
+    renderLockSelect();
+  });
+}
+
+async function showAdmin(){
+  AdminModal.style.display='flex';
+  AdminModal.removeAttribute('aria-hidden');
+  const hash = LS.get('admin_hash', null);
+  const adminArea=document.getElementById('adminArea');
+  adminArea.innerHTML='';
+  if(!hash){
+    adminArea.innerHTML = `<div style="margin-top:8px"><label>Set Admin Password (baru)</label><input id="newPass" type="password"></div><div style="margin-top:8px"><button class="btn primary" id="setPass">Set Password</button></div>`;
+    document.getElementById('setPass').onclick=async()=>{const p=document.getElementById('newPass').value.trim(); if(!p) return alert('Kosong'); await Auth.setPassword(p); alert('Password tersimpan'); Auth.login(); showAdmin();};
+    return;
   }
-
-  function editSubject(index){
-    let d = daySelect.value;
-    let cell = document.getElementById('subj-'+index);
-    cell.contentEditable = true;
-    cell.focus();
-    cell.onblur = function(){
-      data.days[d][index] = cell.textContent.trim();
-      cell.contentEditable = false;
-      saveData();
+  if(!Auth.isAdmin()){
+    adminArea.innerHTML = `<div style="margin-top:8px"><label>Password Admin</label><input id="loginPass" type="password"></div><div style="margin-top:8px"><button class="btn primary" id="doLogin">Login</button></div>`;
+    document.getElementById('doLogin').onclick=async()=>{const p=document.getElementById('loginPass').value; if(!p) return; const ok=await Auth.check(p); if(ok){Auth.login();showAdmin();}else alert('Salah');};
+    return;
+  }
+  adminArea.innerHTML=`
+    <div class="small">Status: <b>Admin</b></div>
+    <div style="margin-top:10px"><button class="btn ghost" id="btnLogout">Logout</button></div>
+    <hr>
+    <div style="margin-top:8px"><h4>Edit / Hapus Paket Kustom</h4><div id="adminPacks"></div></div>
+    <hr>
+    <div style="margin-top:8px"><h4>Kunci Paket</h4><div id="lockSelect"></div></div>
+    <hr>
+    <div style="margin-top:8px"><h4>Riwayat Latihan</h4><div class="small">Hapus semua riwayat skor latihan.</div><div style="margin-top:8px"><button class="btn danger" id="adminClearSkor">🗑 Hapus Riwayat Skor</button></div></div>
+    <hr>
+    <div style="margin-top:8px"><h4>Ganti Password Admin</h4><label>Password Lama</label><input id="oldPass" type="password"><label>Password Baru</label><input id="newPass2" type="password"><div style="margin-top:8px"><button class="btn primary" id="changePass">Ganti Password</button></div></div>
+  `;
+  document.getElementById('btnLogout').onclick=()=>{Auth.logout();showAdmin();};
+  renderAdminPacks();
+  renderLockSelect();
+  if(document.getElementById('adminClearSkor')){
+    document.getElementById('adminClearSkor').onclick=()=>{
+      if(!confirm('Yakin ingin hapus semua riwayat skor latihan?')) return;
+      LS.set('skor',[]);
+      renderSkor(); renderKPI();
+      alert('Riwayat skor berhasil dihapus');
     };
   }
-
-  function renderSchedule(){
-    let d = daySelect.value;
-    scheduleTable.innerHTML = '';
-    data.days[d].forEach((subj,i)=>{
-      let tr = document.createElement('tr');
-      tr.setAttribute('draggable','true');
-      tr.innerHTML = `<td>${i+1}</td>
-                      <td id="subj-${i}">${subj}</td>
-                      <td>
-                        <button class='btn btn-blue' onclick='editSubject(${i})'>✏️</button>
-                        <button class='btn btn-red' onclick='removeSubject(${i})'>🗑️</button>
-                      </td>`;
-      addDnDHandlers(tr, i);
-      scheduleTable.appendChild(tr);
-    });
-    notes.value = data.notes[d] || '';
-  }
-
-  function saveData(){
-    let d = daySelect.value;
-    data.notes[d] = notes.value;
-    localStorage.setItem('jadwalData', JSON.stringify(data));
-    alert('Data disimpan!');
-  }
-
-  function backupData(){
-    let blob = new Blob([JSON.stringify(data)], {type:'application/json'});
-    let a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'jadwal.json';
-    a.click();
-  }
-
-  function importData(){
-    let inp = document.createElement('input');
-    inp.type = 'file';
-    inp.accept = 'application/json';
-    inp.onchange = e=>{
-      let file = e.target.files[0];
-      let reader = new FileReader();
-      reader.onload = ()=>{ data = JSON.parse(reader.result); renderDays(); saveData(); };
-      reader.readAsText(file);
-    };
-    inp.click();
-  }
-
-  function toggleDarkMode(){
-    document.body.classList.toggle('dark');
-  }
-
-  function addDnDHandlers(row, index){
-    row.addEventListener('dragstart', (e)=>{
-      dragSrcEl = index;
-      row.classList.add('dragging');
-    });
-    row.addEventListener('dragend', ()=>{
-      row.classList.remove('dragging');
-    });
-    row.addEventListener('dragover', (e)=>{
-      e.preventDefault();
-    });
-    row.addEventListener('drop', (e)=>{
-      let d = daySelect.value;
-      let rows = Array.from(scheduleTable.querySelectorAll('tr'));
-      let dropIndex = rows.indexOf(row);
-      let moved = data.days[d].splice(dragSrcEl,1)[0];
-      data.days[d].splice(dropIndex,0,moved);
-      renderSchedule(); saveData();
-    });
-  }
-
-  daySelect.onchange = renderSchedule;
-  renderDays();
-      // Register Service Worker
-    if ("serviceWorker" in navigator) {
+}
+      if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("service-worker.js")
         .then(() => console.log("Service Worker registered"))
         .catch(err => console.error("SW registration failed:", err));

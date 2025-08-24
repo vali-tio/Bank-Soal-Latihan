@@ -1,6 +1,6 @@
 {
-  "name": "Jadwal Pelajaran",
-  "short_name": "Jadwal",
+  "name": "Bank Soal",
+  "short_name": "Soal",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#ffffff",
