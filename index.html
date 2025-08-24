@@ -546,17 +546,39 @@ const AdminModal=document.getElementById('modalAdmin');
 document.getElementById('btnAdmin').onclick=showAdmin;
 document.getElementById('closeAdmin').onclick=()=>{AdminModal.style.display='none';AdminModal.setAttribute('aria-hidden','true');};
 
-const Auth={ login(){LS.set('isAdmin',true)}, logout(){LS.set('isAdmin',false)}, isAdmin(){return !!LS.get('isAdmin',false)}, async setPassword(p){const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p)); LS.set('admin_hash',Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join(''));}, async check(p){const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p)); const s=Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join(''); return s===LS.get('admin_hash'); }};
+const Auth={
+  login(){LS.set('isAdmin',true)},
+  logout(){LS.set('isAdmin',false)},
+  isAdmin(){return !!LS.get('isAdmin',false)},
+  async setPassword(p){
+    const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p));
+    LS.set('admin_hash',Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join(''));
+  },
+  async check(p){
+    const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p));
+    const s=Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('');
+    return s===LS.get('admin_hash');
+  }
+};
 
 // fungsi render admin packs
 function renderAdminPacks(){
   const packs=getCustomPacks();
   const div=document.getElementById('adminPacks');
-  if(!Object.keys(packs).length){ div.innerHTML='<div class="small">Belum ada paket kustom.</div>'; return; }
-  div.innerHTML=Object.keys(packs).map(k=>`<div class="item"><div class="grow"><b>${k}</b><br><span class="small">${packs[k].tag||''}</span></div><button class="btn danger" data-delpack="${k}">Hapus</button></div>`).join('');
+  if(!Object.keys(packs).length){
+    div.innerHTML='<div class="small">Belum ada paket kustom.</div>'; return;
+  }
+  div.innerHTML=Object.keys(packs).map(k=>
+    `<div class="item"><div class="grow"><b>${k}</b><br><span class="small">${packs[k].tag||''}</span></div>
+     <button class="btn danger" data-delpack="${k}">Hapus</button></div>`
+  ).join('');
   div.querySelectorAll('[data-delpack]').forEach(b=>b.onclick=()=>{
     if(!confirm('Hapus paket '+b.dataset.delpack+'?'))return;
-    const packs=getCustomPacks(); delete packs[b.dataset.delpack]; LS.set('packs',packs); renderAdminPacks(); populatePaketOptions();
+    const packs=getCustomPacks();
+    delete packs[b.dataset.delpack];
+    LS.set('packs',packs);
+    renderAdminPacks();
+    populatePaketOptions();
   });
 }
 
@@ -565,10 +587,15 @@ function renderLockSelect(){
   const packs=allPacks();
   const div=document.getElementById('lockSelect');
   const locked=LS.get('lockedPacks',[]);
-  if(!Object.keys(packs).length){ div.innerHTML='<div class="small">Belum ada paket.</div>'; return; }
+  if(!Object.keys(packs).length){
+    div.innerHTML='<div class="small">Belum ada paket.</div>'; return;
+  }
   div.innerHTML=Object.keys(packs).map(k=>{
     const isLocked=locked.includes(k);
-    return `<div class="item"><div class="grow">${k}</div><button class="btn ${isLocked?'warn':'ghost'}" data-lock="${k}">${isLocked?'Buka':'Kunci'}</button></div>`;
+    return `<div class="item"><div class="grow">${k}</div>
+      <button class="btn ${isLocked?'warn':'ghost'}" data-lock="${k}">
+        ${isLocked?'Buka':'Kunci'}
+      </button></div>`;
   }).join('');
   div.querySelectorAll('[data-lock]').forEach(b=>b.onclick=()=>{
     const k=b.dataset.lock;
@@ -586,31 +613,79 @@ async function showAdmin(){
   const hash = LS.get('admin_hash', null);
   const adminArea=document.getElementById('adminArea');
   adminArea.innerHTML='';
+
   if(!hash){
-    adminArea.innerHTML = `<div style="margin-top:8px"><label>Set Admin Password (baru)</label><input id="newPass" type="password"></div><div style="margin-top:8px"><button class="btn primary" id="setPass">Set Password</button></div>`;
-    document.getElementById('setPass').onclick=async()=>{const p=document.getElementById('newPass').value.trim(); if(!p) return alert('Kosong'); await Auth.setPassword(p); alert('Password tersimpan'); Auth.login(); showAdmin();};
+    adminArea.innerHTML = `
+      <div style="margin-top:8px">
+        <label>Set Admin Password (baru)</label>
+        <input id="newPass" type="password">
+      </div>
+      <div style="margin-top:8px">
+        <button class="btn primary" id="setPass">Set Password</button>
+      </div>`;
+    document.getElementById('setPass').onclick=async()=>{
+      const p=document.getElementById('newPass').value.trim();
+      if(!p) return alert('Kosong');
+      await Auth.setPassword(p);
+      alert('Password tersimpan');
+      Auth.login();
+      showAdmin();
+    };
     return;
   }
+
   if(!Auth.isAdmin()){
-    adminArea.innerHTML = `<div style="margin-top:8px"><label>Password Admin</label><input id="loginPass" type="password"></div><div style="margin-top:8px"><button class="btn primary" id="doLogin">Login</button></div>`;
-    document.getElementById('doLogin').onclick=async()=>{const p=document.getElementById('loginPass').value; if(!p) return; const ok=await Auth.check(p); if(ok){Auth.login();showAdmin();}else alert('Salah');};
+    adminArea.innerHTML = `
+      <div style="margin-top:8px">
+        <label>Password Admin</label>
+        <input id="loginPass" type="password">
+      </div>
+      <div style="margin-top:8px">
+        <button class="btn primary" id="doLogin">Login</button>
+      </div>`;
+    document.getElementById('doLogin').onclick=async()=>{
+      const p=document.getElementById('loginPass').value;
+      if(!p) return;
+      const ok=await Auth.check(p);
+      if(ok){Auth.login();showAdmin();} else alert('Salah');
+    };
     return;
   }
+
+  // jika admin sudah login
   adminArea.innerHTML=`
-    <div class="small">Status: <b>Admin</b></div>
-    <div style="margin-top:10px"><button class="btn ghost" id="btnLogout">Logout</button></div>
-    <hr>
+    <div class="logout-bar flex" style="justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--card-bg);padding:8px;border-bottom:1px solid #ccc;z-index:10;">
+      <div class="small">Status: <b>Admin</b></div>
+      <button class="btn ghost" id="btnLogout">Logout</button>
+    </div>
+
     <div style="margin-top:8px"><h4>Edit / Hapus Paket Kustom</h4><div id="adminPacks"></div></div>
     <hr>
     <div style="margin-top:8px"><h4>Kunci Paket</h4><div id="lockSelect"></div></div>
     <hr>
-    <div style="margin-top:8px"><h4>Riwayat Latihan</h4><div class="small">Hapus semua riwayat skor latihan.</div><div style="margin-top:8px"><button class="btn danger" id="adminClearSkor">🗑 Hapus Riwayat Skor</button></div></div>
+    <div style="margin-top:8px"><h4>Riwayat Latihan</h4>
+      <div class="small">Hapus semua riwayat skor latihan.</div>
+      <div style="margin-top:8px">
+        <button class="btn danger" id="adminClearSkor">🗑 Hapus Riwayat Skor</button>
+      </div>
+    </div>
     <hr>
-    <div style="margin-top:8px"><h4>Ganti Password Admin</h4><label>Password Lama</label><input id="oldPass" type="password"><label>Password Baru</label><input id="newPass2" type="password"><div style="margin-top:8px"><button class="btn primary" id="changePass">Ganti Password</button></div></div>
+    <div style="margin-top:8px"><h4>Ganti Password Admin</h4>
+      <label>Password Lama</label><input id="oldPass" type="password">
+      <label>Password Baru</label><input id="newPass2" type="password">
+      <div style="margin-top:8px">
+        <button class="btn primary" id="changePass">Ganti Password</button>
+      </div>
+    </div>
   `;
-  document.getElementById('btnLogout').onclick=()=>{Auth.logout();showAdmin();};
+
+  document.getElementById('btnLogout').onclick=()=>{
+    Auth.logout();
+    showAdmin();
+  };
   renderAdminPacks();
   renderLockSelect();
+
   if(document.getElementById('adminClearSkor')){
     document.getElementById('adminClearSkor').onclick=()=>{
       if(!confirm('Yakin ingin hapus semua riwayat skor latihan?')) return;
@@ -620,11 +695,6 @@ async function showAdmin(){
     };
   }
 }
-      if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("service-worker.js")
-        .then(() => console.log("Service Worker registered"))
-        .catch(err => console.error("SW registration failed:", err));
-    }
 </script>
 </body>
 </html>
